@@ -1,6 +1,36 @@
 import type { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { SupabaseAdapter } from "@next-auth/supabase-adapter";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+);
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email?: string | null;
+      name?: string | null;
+      image?: string | null;
+    };
+  }
+
+  interface User {
+    id: string;
+    email?: string | null;
+    name?: string | null;
+    image?: string | null;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id?: string;
+  }
+}
 
 export const options: NextAuthOptions = {
   secret: process.env.NEXT_SECRET,
@@ -13,10 +43,10 @@ export const options: NextAuthOptions = {
       name: "Credentials",
 
       credentials: {
-        username: {
-          label: "Username:",
+        email: {
+          label: "Email: ",
           type: "text",
-          placeholder: "Your-cool-username",
+          placeholder: "Your email to sign in",
         },
         password: {
           label: "Password: ",
@@ -25,19 +55,54 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        // This is where you need to retrieve user data
-        // To verify with credentials
-        const user = { id: "42", name: "Dave", password: "nextauth" };
-
-        if (
-          credentials?.username === user.name &&
-          credentials?.password === user.password
-        ) {
-          return user;
-        } else {
-          return null;
+        if (!credentials) {
+          throw new Error("No credentials provided");
         }
+
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) {
+          throw new Error("Invalid email or password");
+        }
+
+        if (data?.user) {
+          return { id: data.user.id, email: data.user.email };
+        }
+
+        return null;
       },
     }),
   ],
+  adapter: SupabaseAdapter({
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+    secret: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
+  }),
+  callbacks: {
+    async session({ session, token }) {
+      if (token?.id) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
+    async signIn({ user, account, profile }) {
+      return true;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+  },
+  pages: {
+    signIn: "/auth/signin",
+  },
 };
