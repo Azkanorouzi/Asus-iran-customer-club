@@ -1,13 +1,16 @@
+// This file only returns the options for nextauth
 import type { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { SupabaseAdapter } from "@next-auth/supabase-adapter";
 import { createClient } from "@supabase/supabase-js";
 
+// Creating a supabase client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
+// Types
 declare module "next-auth" {
   interface Session {
     user: {
@@ -35,10 +38,12 @@ declare module "next-auth/jwt" {
 export const options: NextAuthOptions = {
   secret: process.env.NEXT_SECRET,
   providers: [
+    // For login with github oauth
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
+    // For login with email
     CredentialsProvider({
       name: "Credentials",
 
@@ -54,6 +59,7 @@ export const options: NextAuthOptions = {
           placeholder: "your-awesome-password",
         },
       },
+      // The function, that's called after form submission, responsible for authorization of data
       async authorize(credentials) {
         if (!credentials) {
           throw new Error("No credentials provided");
@@ -81,6 +87,7 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
+  // Supabase next-auth integration
   adapter: SupabaseAdapter({
     url: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
     secret: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
@@ -102,6 +109,7 @@ export const options: NextAuthOptions = {
       return token;
     },
   },
+  // Specifying the custom sign in route
   pages: {
     signIn: "/auth/signin",
   },

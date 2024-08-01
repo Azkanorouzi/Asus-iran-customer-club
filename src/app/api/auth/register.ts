@@ -1,3 +1,4 @@
+// This api route handlers user registaration
 import { NextApiRequest, NextApiResponse } from "next";
 import supabase from "@/utils/client";
 
