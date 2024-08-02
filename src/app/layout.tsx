@@ -9,6 +9,7 @@ import { AppBar, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import Navbar from "@/components/ui/Navbar";
 import Three3Obj from "@/components/ui/Three3Obj";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -23,6 +24,19 @@ export default function RootLayout({
             {/* For resetting css with material ui */}
             <CssBaseline />
 
+            <Toaster
+              gutter={16}
+              position="bottom-center"
+              containerStyle={{ margin: "8px" }}
+              toastOptions={{
+                success: {
+                  duration: 3000,
+                },
+                error: {
+                  duration: 5000,
+                },
+              }}
+            />
             <Three3Obj />
             {/* Store provider for zusand */}
             <StoreProvider lastUpdate={new Date().getTime()}>
