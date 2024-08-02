@@ -10,6 +10,7 @@ import {
 interface ThemeContextType {
   toggleTheme: () => void;
   isDarkMode: boolean;
+  toggleThemeWithTransition: (time: number) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -19,6 +20,9 @@ export const ThemeProvider = function ({ children }: { children: ReactNode }) {
 
   // For toggling between night and dark mode
   const toggleTheme = () => setIsDarkMode((curTheme) => !curTheme);
+  const toggleThemeWithTransition = (time: number) => {
+    setTimeout(toggleTheme, time);
+  };
 
   // Custom theme
   const darkMode = createTheme({
@@ -45,8 +49,12 @@ export const ThemeProvider = function ({ children }: { children: ReactNode }) {
     palette: { mode: "light" },
   });
   return (
-    <ThemeContext.Provider value={{ toggleTheme, isDarkMode }}>
-      <MuiThemeProvider theme={darkMode}>{children}</MuiThemeProvider>
+    <ThemeContext.Provider
+      value={{ toggleTheme, isDarkMode, toggleThemeWithTransition }}
+    >
+      <MuiThemeProvider theme={isDarkMode ? darkMode : lightMode}>
+        {children}
+      </MuiThemeProvider>
     </ThemeContext.Provider>
   );
 };

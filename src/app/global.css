@@ -1,0 +1,10 @@
+* {
+  transition: 0.5s;
+}
+
+main {
+  z-index: 50 !important;
+  position: absolute !important;
+  top: 0;
+  right: 0;
+}

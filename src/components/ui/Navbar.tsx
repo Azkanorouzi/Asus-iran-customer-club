@@ -20,6 +20,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { ReactNode } from "react";
+import ThemeToggler from "./ThemeToggler";
 
 const drawerWidth = 240;
 
@@ -96,28 +97,36 @@ export default function PersistentDrawerRight({
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <Box>
       <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            Persistent drawer
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <ThemeToggler />
+          <Typography variant="h6" component="div" paddingRight={"50px"}>
+            Asus iran | customer club
           </Typography>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="end"
             onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: "none" }) }}
+            sx={{
+              ...(open && {
+                opacity: 0,
+                pointerEvents: "none",
+              }),
+            }}
           >
             <MenuIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
+
+      {/* =========== Page content============ */}
       <Main open={open}>
         <DrawerHeader />
         {children}
       </Main>
+      {/* =========== Drawer ============ */}
       <Drawer
         sx={{
           width: drawerWidth,
