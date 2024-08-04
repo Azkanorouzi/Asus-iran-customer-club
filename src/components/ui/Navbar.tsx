@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -153,19 +153,19 @@ export default function PersistentDrawerRight({
         <List>
           {["Home", "Customers", "Transactions"].map((text, index) => (
             <Button
+              key={text}
               LinkComponent={Link}
               href={`/${text.toLowerCase()}`}
-              sx={{ color: "white" }}
             >
               <ListItem key={text} disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
                     {index === 0 ? (
-                      <PeopleOutline />
-                    ) : index === 1 ? (
-                      <Paid />
-                    ) : index === 2 ? (
                       <Home />
+                    ) : index === 1 ? (
+                      <PeopleOutline />
+                    ) : index === 2 ? (
+                      <Paid />
                     ) : (
                       ""
                     )}
@@ -178,13 +178,13 @@ export default function PersistentDrawerRight({
         </List>
         <Divider />
         <List>
-          {["Login", "Signup"].map((text, index) => (
+          {["Signin", "Signup"].map((text, index) => (
             <Button
+              key={text}
               LinkComponent={Link}
-              href={`/${text.toLowerCase()}`}
-              sx={{ color: "white" }}
+              href={`/auth/${text.toLowerCase()}`}
             >
-              <ListItem key={text} disablePadding>
+              <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
                     {index % 2 === 0 ? <VpnKeyIcon /> : <AssignmentInd />}
