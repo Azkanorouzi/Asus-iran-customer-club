@@ -37,6 +37,7 @@ declare module "next-auth/jwt" {
 
 export const options: NextAuthOptions = {
   secret: process.env.NEXT_SECRET,
+  debug: true,
   providers: [
     // For login with github oauth
     GithubProvider({
@@ -94,6 +95,7 @@ export const options: NextAuthOptions = {
   }),
   callbacks: {
     async session({ session, token }) {
+      console.log("hi", session, token);
       if (token?.id) {
         session.user.id = token.id as string;
       }
