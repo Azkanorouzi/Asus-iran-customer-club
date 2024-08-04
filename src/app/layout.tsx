@@ -5,7 +5,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { AppBar, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import Navbar from "@/components/ui/Navbar";
 import Three3Obj from "@/components/ui/Three3Obj";
