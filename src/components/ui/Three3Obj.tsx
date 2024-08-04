@@ -1,48 +1,26 @@
 "use client";
-import { useSendMessage } from "@/hooks/useSendMessage";
+import { Box } from "@mui/material";
 import Spline from "@splinetool/react-spline";
-import React, { useEffect } from "react";
-import { toast } from "react-hot-toast";
+import { usePathname } from "next/navigation";
+import React from "react";
 
 export default function Three3Obj() {
-  useSendMessage({
-    message: "Hi asus iran",
-    icon: "🙌",
-    delay: 300,
-    duration: 5000,
-  });
-
-  useSendMessage({
-    message: "Welcome to your customer club",
-    icon: "👨",
-    delay: 800,
-    duration: 4000,
-  });
-
-  useSendMessage({
-    message: "This small gift is for you, from AZKA NOROUZI",
-    icon: "🎁",
-    delay: 1500,
-    duration: 4000,
-  });
-
-  useSendMessage({
-    message:
-      "You can click on the hamburger menu to login and access the dashboard",
-    icon: "🍔",
-    delay: 3000,
-    duration: 6000,
-  });
-
+  const path = usePathname();
+  const isHidden =
+    path.includes("/customers") || path.includes("/transactions");
   return (
-    <div
-      style={{
-        marginTop: "150px",
+    <Box
+      sx={{
+        marginTop: { lg: "150px" },
+        marginRight: "150px",
+        display: isHidden ? "none" : "",
         position: "absolute",
-        scale: 1,
+        "@media (max-width: 1000px)": {
+          display: "none",
+        },
       }}
     >
       <Spline scene="https://prod.spline.design/8eyOhur75-CwIpt9/scene.splinecode" />
-    </div>
+    </Box>
   );
 }
