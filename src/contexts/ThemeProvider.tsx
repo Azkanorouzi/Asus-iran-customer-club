@@ -29,8 +29,8 @@ export const ThemeProvider = function ({ children }: { children: ReactNode }) {
     palette: {
       mode: "dark",
       primary: {
-        dark: "#000e41",
-        main: "#000e41",
+        dark: "#00e5ff",
+        main: "#00e5ff",
         contrastText: "#baffdd",
       },
       secondary: {
