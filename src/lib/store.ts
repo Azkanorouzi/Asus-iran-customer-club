@@ -1,22 +1,27 @@
+import { customerData } from "@/data/customersData";
+import { transactionData } from "@/data/transactionsData";
+import { customerDataType, transactionDataType } from "@/types/definitions";
 import { createContext, useContext } from "react";
 import { createStore, useStore as useZustandStore } from "zustand";
 import { PreloadedStoreInterface } from "./StoreProvider";
 
 export interface StoreInterface {
-  lastUpdate: number;
-  light: boolean;
-  count: number;
-  tick: (lastUpdate: number) => void;
-  increment: () => void;
-  decrement: () => void;
-  reset: () => void;
+  transactions: transactionDataType[];
+  customers: customerDataType[];
+  // Customer
+  deleteCustomer: (id: string) => void;
+  editCustomer: (id: string, newCustomer: customerDataType) => void;
+  addCustomer: (newCustomer: customerDataType) => void;
+  // Transactions
+  deleteTransaction: (id: string) => void;
+  editTransaction: (id: string, newTransaction: transactionDataType) => void;
+  addTransaction: (transaction: transactionDataType) => void;
 }
 
 function getDefaultInitialState() {
   return {
-    lastUpdate: new Date(1970, 1, 1).getTime(),
-    light: false,
-    count: 0,
+    transactions: transactionData,
+    customers: customerData,
   } as const;
 }
 
@@ -38,22 +43,51 @@ export function initializeStore(preloadedState: PreloadedStoreInterface) {
   return createStore<StoreInterface>((set, get) => ({
     ...getDefaultInitialState(),
     ...preloadedState,
-    tick: (lastUpdate) =>
-      set({
-        lastUpdate,
-        light: !get().light,
-      }),
-    increment: () =>
-      set({
-        count: get().count + 1,
-      }),
-    decrement: () =>
-      set({
-        count: get().count - 1,
-      }),
-    reset: () =>
-      set({
-        count: getDefaultInitialState().count,
-      }),
+    // Customer methods
+    editCustomer: (id, newCustomer) => {
+      set(({ customers }) => {
+        const updatedCustomers = customers.map((customer) =>
+          customer.id === id ? newCustomer : customer,
+        );
+        return { customers: updatedCustomers };
+      });
+    },
+    addCustomer: (newCustomer) => {
+      set(({ customers }) => {
+        const updatedCustomers = [newCustomer, ...customers];
+        return { customers: updatedCustomers };
+      });
+    },
+    deleteCustomer: (id) => {
+      set(({ customers }) => {
+        const updatedCustomers = customers.filter(
+          (customer) => customer.id !== id,
+        );
+        return { customers: updatedCustomers };
+      });
+    },
+    // Transaction methods
+    editTransaction: (id, newTransaction) => {
+      set(({ transactions }) => {
+        const updatedTransactions = transactions.map((transaction) =>
+          transaction.id === id ? newTransaction : transaction,
+        );
+        return { transactions: updatedTransactions };
+      });
+    },
+    addTransaction: (newTransaction) => {
+      set(({ transactions }) => {
+        const updatedTransactions = [newTransaction, ...transactions];
+        return { transactions: updatedTransactions };
+      });
+    },
+    deleteTransaction: (id) => {
+      set(({ transactions }) => {
+        const updatedTransactions = transactions.filter(
+          (transaction) => transaction.id !== id,
+        );
+        return { transactions: updatedTransactions };
+      });
+    },
   }));
 }
