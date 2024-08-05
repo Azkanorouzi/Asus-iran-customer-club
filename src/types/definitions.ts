@@ -12,3 +12,5 @@ export interface transactionDataType {
   profit: number;
   numberOfBoughtItems: number;
 }
+
+export type statusType = "happy" | "neutral" | "sad";
