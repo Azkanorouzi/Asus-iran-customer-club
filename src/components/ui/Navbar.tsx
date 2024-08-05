@@ -170,7 +170,7 @@ export default function PersistentDrawerRight({
                       ""
                     )}
                   </ListItemIcon>
-                  <ListItemText primary={text} />
+                  <ListItemText primary={text.length ? text : "home"} />
                 </ListItemButton>
               </ListItem>
             </Button>
