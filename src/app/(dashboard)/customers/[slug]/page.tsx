@@ -1,4 +1,5 @@
 "use client";
+import notFound from "@/app/not-found";
 import { useStore } from "@/lib/store";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
@@ -16,6 +17,11 @@ export default function page({
   const customerTarget = customers.filter(
     (customer) => customer.id === slug,
   )[0];
+
+  if (!customerTarget) {
+    notFound();
+    return;
+  }
   return (
     <Box width={"100vw"} maxWidth={"950px"}>
       {" "}

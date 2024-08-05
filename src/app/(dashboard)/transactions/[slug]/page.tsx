@@ -3,6 +3,7 @@ import { useStore } from "@/lib/store";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import React from "react";
 
 export default function page({
@@ -14,6 +15,11 @@ export default function page({
   const targetTransaction = transactios.filter(
     (transaction) => transaction.id === slug,
   )[0];
+
+  if (!targetTransaction) {
+    notFound();
+    return;
+  }
   return (
     <Box width={"100vw"} maxWidth={"950px"}>
       {" "}
@@ -22,7 +28,7 @@ export default function page({
           id: {targetTransaction.id}
         </Typography>
 
-        <Link href={`/customers/${targetTransaction.id}`}>
+        <Link href={`/customers/${targetTransaction.by}`}>
           <Typography variant="h6" component="h2">
             By {targetTransaction.by}
           </Typography>
