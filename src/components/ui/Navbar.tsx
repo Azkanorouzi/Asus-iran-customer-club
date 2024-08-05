@@ -151,7 +151,7 @@ export default function PersistentDrawerRight({
         </DrawerHeader>
         <Divider />
         <List>
-          {["Home", "Customers", "Transactions"].map((text, index) => (
+          {["", "Customers", "Transactions"].map((text, index) => (
             <Button
               key={text}
               LinkComponent={Link}
