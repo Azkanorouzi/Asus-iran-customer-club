@@ -13,7 +13,6 @@ export default function page({
 }) {
   const customers = useStore((state) => state.customers);
   const transactions = useStore((state) => state.transactions);
-  console.log(slug);
   const customerTarget = customers.filter(
     (customer) => customer.id === slug,
   )[0];

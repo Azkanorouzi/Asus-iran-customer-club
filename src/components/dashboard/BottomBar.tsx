@@ -1,7 +1,13 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { AddCircle, Logout, LogoutOutlined, Paid } from "@mui/icons-material";
+import {
+  AddCircle,
+  Logout,
+  LogoutOutlined,
+  Paid,
+  People,
+} from "@mui/icons-material";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import React, { useState } from "react";
 import CustomDialog from "./CustomDialog";
@@ -43,8 +49,8 @@ export const BottomBar = () => {
       </CustomDialog>
 
       <BottomNavigationAction
-        label="Transactions"
-        icon={<Paid />}
+        label={isCustomers ? "transactions" : "customers"}
+        icon={isCustomers ? <People /> : <Paid></Paid>}
         onClick={() => router.replace("/transactions")}
       />
       <CustomDialog
